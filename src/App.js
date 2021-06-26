@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import Form from './Components/Form';
+import React, { lazy, Suspense } from "react";
+import ReactDOM from "react-dom";
 
+import fireBaseDb from './firebase';
 function App() {
+  const Navbar = lazy(() => import("./Components/Navbar"));
+  const Form = lazy(() => import("./Components/Form"));
+  const Loader = lazy(() => import("./Components/Loader"));
+  const addoredit = obj => {
+    const data = fireBaseDb.database().ref('links_info');
+    data.push(obj, err => {
+      if (err)
+        console.log(err);
+    })
+  }
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div  >
+
+      <Suspense fallback={<div style={{ marginTop: '100px' }} >hello  </div>}>
+
+        <Navbar />
+        <Form addoredit={addoredit} />
+      </Suspense>
     </div>
   );
 }
+
+
+
+
 
 export default App;
